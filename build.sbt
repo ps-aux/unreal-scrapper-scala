@@ -1,6 +1,7 @@
 version := "0.1"
 
 scalaVersion := "2.11.6"
+sbtVersion := "0.13.8"
 
 libraryDependencies ++= {
   Seq(
@@ -13,3 +14,7 @@ libraryDependencies ++= {
 libraryDependencies += "org.springframework" % "spring-context" % "4.3.6.RELEASE"
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "0.9.28"
 
+val stage = taskKey[Unit]("Stage task")
+
+// Make state allias for assembly (required by Heroku)
+stage <<= assembly map { x => x }
