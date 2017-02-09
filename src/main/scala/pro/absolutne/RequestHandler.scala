@@ -12,6 +12,6 @@ class RequestHandler @Autowired()(scrapService: ScrapperService) extends HttpHan
   override def handleRequest(exchange: HttpServerExchange): Unit = {
 
     exchange.getResponseHeaders.put(Headers.CONTENT_TYPE, "text/plain")
-    exchange.getResponseSender.send(scrapService.go())
+    exchange.getResponseSender.send(scrapService.sayHello())
   }
 }
