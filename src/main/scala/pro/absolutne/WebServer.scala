@@ -11,8 +11,8 @@ class WebServer @Autowired()(env:Environment, handler: RequestHandler) {
 
   private val logger = LoggerFactory.getLogger(classOf[Context])
 
-  private val host = env.getProperty("host")
-  private val port = env.getProperty("port", classOf[Integer])
+  private val host = env.getProperty("server.host")
+  private val port = env.getProperty("server.port", classOf[Integer])
 
   logger info "Building server"
 
