@@ -14,15 +14,9 @@ object App {
 
     val ctx = Context.init()
 
-    val handler = ctx.getBean(classOf[RequestHandler])
+    val server = ctx.getBean(classOf[WebServer])
 
-    logger info "Building server"
-    val server = Undertow.builder.addHttpListener(port, host)
-      .setHandler(handler).build()
-
-    logger info "Starting server"
     server.start()
-    logger info s"Server started. Listening on host:${port}"
   }
 
 }
