@@ -17,7 +17,7 @@ libraryDependencies ++= {
     "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % seleniumVersion,
     "org.seleniumhq.selenium" % "selenium-chrome-driver" % seleniumVersion,
     "org.springframework" % "spring-webmvc" % springVersion,
-    "org.springframework" % "spring-context" % springVersion
+    "org.springframework" % "spring-context" % springVersion,
   )
 }
 

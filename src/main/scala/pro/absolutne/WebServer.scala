@@ -1,41 +1,30 @@
 package pro.absolutne
 
-import io.undertow.{Handlers, Undertow}
+import java.util
+import javax.servlet.{ServletContainerInitializer, ServletContext}
+
 import io.undertow.server.handlers.PathHandler
 import io.undertow.servlet.Servlets
-import io.undertow.servlet.api.{DeploymentInfo, InstanceFactory, InstanceHandle, ServletInfo}
-import io.undertow.servlet.handlers.DefaultServlet
+import io.undertow.servlet.api._
+import io.undertow.{Handlers, Undertow}
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.{Autowired, Value}
-import org.springframework.core.env.Environment
-import org.springframework.stereotype.Service
-import org.springframework.web.context.WebApplicationContext
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext
 import org.springframework.web.servlet.DispatcherServlet
 
-@Service
-class WebServer @Autowired()(env: Environment,
-                             ctx: WebApplicationContext,
-                             handler: RequestHandler) {
+class WebServer {
 
-  private val logger = LoggerFactory.getLogger(classOf[Context])
+  private val logger = LoggerFactory.getLogger(classOf[WebServer])
 
-  private val host = env.getProperty("server.host")
-  private val port = env.getProperty("server.port", classOf[Integer])
-  private val ctxPath = env.getProperty("server.servlet.context-path")
-  private val appName = env.getProperty("app.name")
-
+  private val host = "0.0.0.0"
+  private val port = 8000
+  private val ctxPath = "/"
+  private val appName = "unreal-scrapper"
 
   logger info "Building server"
 
 
   private val server = Undertow.builder.addHttpListener(port, host)
     .setHandler(pathHandler()).build()
-
-
-
-
-
-
 
 
   def start(): Unit = {
@@ -54,34 +43,33 @@ class WebServer @Autowired()(env: Environment,
       .addPrefixPath(ctxPath, manager.start())
   }
 
-  private def deploymentInfo(): DeploymentInfo = {
-    Servlets.deployment()
-      .setClassLoader(classOf[WebServer].getClassLoader)
-      .setContextPath(ctxPath)
-      .setDeploymentName(appName)
-      .addServlet(dispatcherServletInfo())
+  private def deploymentInfo(): DeploymentInfo = Servlets.deployment()
+    .setClassLoader(classOf[WebServer].getClassLoader)
+    .setContextPath(ctxPath)
+    .setDeploymentName(appName)
+    .addServletContainerInitalizer(// Ouch horrible TODO refactor to readable anything
+      new ServletContainerInitializerInfo(classOf[SpringContextIntializer],
+        new InstanceFactory[SpringContextIntializer] {
+          override def createInstance(): InstanceHandle[SpringContextIntializer] = {
+            new InstanceHandle[SpringContextIntializer] {
+              override def getInstance() = new SpringContextIntializer()
+
+              override def release(): Unit = {}
+            }
+          }
+        }, null))
+}
+
+class SpringContextIntializer() extends ServletContainerInitializer {
+
+  override def onStartup(c: util.Set[Class[_]], servletCtx: ServletContext): Unit = {
+    val appContext = new AnnotationConfigWebApplicationContext()
+    appContext.setConfigLocation(classOf[ContextConfig].getName)
+
+    val dispatcher = servletCtx.addServlet("dispatcher", new DispatcherServlet(appContext))
+    dispatcher.setLoadOnStartup(1)
+    dispatcher.addMapping("/")
   }
-
-
-  private def dispatcherServletInfo(): ServletInfo = {
-    val dsFactory = new InstanceFactory[DispatcherServlet] {
-      override def createInstance() = new DispatcherServletInstanceHandle(ctx)
-    }
-
-    new ServletInfo("dispatcherServlet", classOf[DispatcherServlet], dsFactory)
-  }
-
-
 }
 
-class DispatcherServletFactory extends InstanceFactory[DispatcherServlet] {
 
-  override def createInstance(): InstanceHandle[DispatcherServlet] = ???
-}
-
-class DispatcherServletInstanceHandle(ctx: WebApplicationContext) extends InstanceHandle[DispatcherServlet] {
-
-  override def getInstance() = new DispatcherServlet(ctx)
-
-  override def release(): Unit = {}
-}
