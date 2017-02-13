@@ -13,9 +13,20 @@ class RecordDao @Autowired()(ds: DataSource) {
 
   val jdbc = new JdbcTemplate(ds)
 
-  def saveRecord(r:Record): Unit = {
-    jdbc.execute("INSERT INTO record  values ('haha')")
+  def saveRecord(r: Record): Unit = {
+    val q = "INSERT INTO record (title,url,area, price, location, date)" +
+      " VALUES (?,?,?,?,?,?)"
+    val area: java.lang.Double = r.area match {
+      case Some(x) => x
+      case _ => null
+    }
 
+    val price: java.lang.Double = r.price match {
+      case Some(x) => x
+      case _ => null
+    }
+
+    jdbc.update(q, r.title, r.url, area, price, r.location, r.date)
   }
 
 }
