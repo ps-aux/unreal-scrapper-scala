@@ -1,4 +1,4 @@
-package pro.absolutne.scrapping
+package pro.absolutne.data.model
 
 class Record(val title: String,
              val url: String,

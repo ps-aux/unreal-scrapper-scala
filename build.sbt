@@ -16,12 +16,17 @@ libraryDependencies ++= {
     "org.seleniumhq.selenium" % "selenium-java" % seleniumVersion,
     "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % seleniumVersion,
     "org.seleniumhq.selenium" % "selenium-chrome-driver" % seleniumVersion,
+
     "org.springframework" % "spring-webmvc" % springVersion,
     "org.springframework" % "spring-context" % springVersion,
+    "org.springframework" % "spring-jdbc" % springVersion,
+
+    "org.postgresql" % "postgresql" % "9.4.1212.jre7",
+
+    "ch.qos.logback" % "logback-classic" % "0.9.28"
   )
 }
 
-libraryDependencies += "ch.qos.logback" % "logback-classic" % "0.9.28"
 
 val stage = taskKey[Unit]("Stage task")
 
