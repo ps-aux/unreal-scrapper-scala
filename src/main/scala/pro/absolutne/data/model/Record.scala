@@ -2,8 +2,8 @@ package pro.absolutne.data.model
 
 class Record(val title: String,
              val url: String,
-             val area: Double,
-             val price: Double,
+             val area: Option[Double],
+             val price: Option[Double],
              val location: String,
              val date: String) {
 

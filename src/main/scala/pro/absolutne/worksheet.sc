@@ -1,3 +1,5 @@
-val takeDigits = "[\\d ]+".r
+val takeDigits = "[\\d(\\d )]+".r
 
-takeDigits.findFirstIn("123 33300").get
+val r = takeDigits.findFirstIn("cena dohodou").get
+
+s"---$r---"

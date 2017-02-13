@@ -23,40 +23,54 @@ class TopRealityScrapper @Autowired()(sink: RecordSink) {
     while (b isPresent paginator) {
       b.find(paginator).click()
       val page = b find ".listing"
-      b.findAll(page, ".estate").map(extractRecord)
+      b.findAll(page, ".estate")
+        .map(extractRecord(_, b))
         .filter(_.isDefined)
         .map(_.get)
         .foreach(sink.sink)
     }
   }
 
-  private def extractRecord(el: WebElement): Option[Record] = {
+  private def extractRecord(el: WebElement, b: Browser): Option[Record] = {
 
     try {
       def findByCss(css: String) = el findElement cssSelector(css)
 
+      def parseNum(str: String) =
+        takeDigits.findFirstIn(str.replaceAll("\\s", "")) match {
+          case Some(s) => Some(s.toDouble)
+          case _ => None
+        }
+
+
       val header = findByCss("h2 a")
-      val area = findByCss(".areas strong")
+      val area = b tryFind ".areas strong"
       val locality = findByCss(".locality")
       val price = findByCss(".price")
       val date = findByCss(".date")
 
+      val priceVal = parseNum(price.getText)
+
+      val areaVal = area match {
+        case Some(areaEl) => parseNum(areaEl.getText)
+        case _ => None
+      }
+
+
       val r = new Record(title = header.getText,
         url = header getAttribute "href",
-        area = takeDigits.findFirstIn(area.getText).get.toDouble,
-        price = takeDigits.findFirstIn(price.getText).get
-          .replaceAll("\\s", "").toDouble,
+        area = areaVal,
+        price = priceVal,
         location = locality.getText,
         date = date.getText)
 
       Some(r)
     } catch {
-      case e: Exception => {
+      case e: Exception =>
         val v = el.getText
         println(s"Problem with $v")
         e.printStackTrace()
         None
-      }
     }
   }
 

@@ -16,6 +16,14 @@ class Browser(driver: WebDriver) {
   def find(parent: WebElement, css: String): WebElement
   = parent.findElement(cssSelector(css))
 
+  def tryFind(css: String): Option[WebElement] = {
+    try {
+      Some(find(css))
+    } catch {
+      case e:Exception => None
+    }
+  }
+
   def findAll(parent: WebElement, css: String): List[WebElement]
   = parent.findElements(cssSelector(css)).asScala.toList
 
