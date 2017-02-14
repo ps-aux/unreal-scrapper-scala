@@ -1,7 +1,7 @@
 version := "0.1"
 name := "unreal-scraper"
 
-scalaVersion := "2.11.6"
+scalaVersion := "2.12.1"
 sbtVersion := "0.13.8"
 
 val undertowVersion = "1.4.8.Final"
