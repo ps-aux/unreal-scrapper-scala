@@ -6,16 +6,17 @@ import javax.sql.DataSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
-import pro.absolutne.data.model.Record
+import pro.absolutne.data.model.RealEstateOffer
 
 @Repository
 class RecordDao @Autowired()(ds: DataSource) {
 
   val jdbc = new JdbcTemplate(ds)
 
-  def saveRecord(r: Record): Unit = {
-    val q = "INSERT INTO record (title,url,area, price, location, date)" +
-      " VALUES (?,?,?,?,?,?)"
+  def saveRecord(r: RealEstateOffer): Unit = {
+    val q = "INSERT INTO record" +
+      " (title,url,area, price, type, location, date, scrapSource, scrapDate)" +
+      " VALUES (?,?,?,?,?,?,?,?,?)"
     val area: java.lang.Double = r.area match {
       case Some(x) => x
       case _ => null
@@ -26,7 +27,8 @@ class RecordDao @Autowired()(ds: DataSource) {
       case _ => null
     }
 
-    jdbc.update(q, r.title, r.url, area, price, r.location, r.date)
+    jdbc.update(q, r.title, r.url, area, price, r.reType,
+      r.location, r.date, r.scrapSource, r.scrapDate)
   }
 
 }

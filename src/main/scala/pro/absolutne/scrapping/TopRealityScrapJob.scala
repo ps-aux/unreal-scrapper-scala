@@ -1,9 +1,12 @@
 package pro.absolutne.scrapping
 
+import java.text.SimpleDateFormat
+import java.util.Date
+
 import org.openqa.selenium.By.cssSelector
 import org.openqa.selenium.WebElement
 import pro.absolutne.data.RecordSink
-import pro.absolutne.data.model.Record
+import pro.absolutne.data.model.RealEstateOffer
 import pro.absolutne.webscrap.{Browser, BrowserElement}
 
 import scala.collection.JavaConverters._
@@ -12,6 +15,9 @@ import pro.absolutne.langutils.JavaOptionals._
 class TopRealityScrapJob(b: Browser, sink: RecordSink, filter: Filter) {
 
   private val takeDigits = "[\\d ]+".r
+  private val takeFlatType = "(\\d\\s.*byt|.*garz.*)\\s(.*)\\s(predaj)".r
+  private val dateFormat = new SimpleDateFormat("MM.dd.yyyy")
+
 
   def start(): Unit = {
     b.goTo("https://www.topreality.sk/")
@@ -30,7 +36,7 @@ class TopRealityScrapJob(b: Browser, sink: RecordSink, filter: Filter) {
     } while (b isPresent paginator)
   }
 
-  private def extractRecord(el: WebElement): Option[Record] = {
+  private def extractRecord(el: WebElement): Option[RealEstateOffer] = {
 
     try {
       def findByCss(css: String) = el findElement cssSelector(css)
@@ -48,6 +54,11 @@ class TopRealityScrapJob(b: Browser, sink: RecordSink, filter: Filter) {
       val price = findByCss(".price")
       val date = findByCss(".date")
 
+      val typeLocationActionInfo = findByCss(".links li")
+
+      val reType = takeFlatType.findAllIn(typeLocationActionInfo.getText)
+        .group(1)
+
       val priceVal = parseNum(price.getText)
 
       val areaVal = area match {
@@ -56,12 +67,16 @@ class TopRealityScrapJob(b: Browser, sink: RecordSink, filter: Filter) {
       }
 
 
-      val r = new Record(title = header.getText,
+      val r = new RealEstateOffer(title = header.getText,
         url = header getAttribute "href",
         area = areaVal,
         price = priceVal,
         location = locality.getText,
-        date = date.getText)
+        date = dateFormat parse date.getText,
+        reType = reType,
+        scrapSource = "top-reality",
+        scrapDate = new Date()
+      )
 
       Some(r)
     } catch {

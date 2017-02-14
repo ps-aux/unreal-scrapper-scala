@@ -1,5 +1,7 @@
-val takeDigits = "[\\d(\\d )]+".r
 
-val r = takeDigits.findFirstIn("cena dohodou").get
 
-s"---$r---"
+val r = "(\\d\\s.*byt|.*garz.*)\\s(.*)\\s(predaj)".r
+
+val in = "dvojgarzonka Miloslavov predaj"
+
+r.findAllIn(in).group(1)
