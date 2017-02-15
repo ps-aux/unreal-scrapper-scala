@@ -19,6 +19,7 @@ class TestController @Autowired()(sink: RecordSink, dao: RecordDao) {
 
     new TopRealityScrapJob(browser, sink, filter)
       .start()
+    println("done")
     "Scrapping  done"
   }
 

@@ -15,8 +15,8 @@ import pro.absolutne.langutils.JavaOptionals._
 class TopRealityScrapJob(b: Browser, sink: RecordSink, filter: Filter) {
 
   private val takeDigits = "[\\d ]+".r
-  private val takeFlatType = "(\\d\\s.*byt|.*garz.*)\\s(.*)\\s(predaj)".r
-  private val dateFormat = new SimpleDateFormat("MM.dd.yyyy")
+  private val takeFlatType = "(\\d\\s.*byt|.*[Gg]ars.*)\\s(.*)\\s(predaj)".r
+  private val dateFormat = new SimpleDateFormat("dd.MM.yyyy")
 
 
   def start(): Unit = {
@@ -53,6 +53,7 @@ class TopRealityScrapJob(b: Browser, sink: RecordSink, filter: Filter) {
       val locality = findByCss(".locality")
       val price = findByCss(".price")
       val date = findByCss(".date")
+      println(date.getText)
 
       val typeLocationActionInfo = findByCss(".links li")
 
