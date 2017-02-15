@@ -1,6 +1,12 @@
 package pro.absolutne.web
 
+import java.nio.file.{FileSystems, Files}
+import java.util.Base64
+
+import org.openqa.selenium.{Dimension, OutputType}
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.phantomjs.PhantomJSDriver
+import org.openqa.selenium.remote.ScreenshotException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.{PostMapping, RestController}
 import pro.absolutne.data.RecordSink
@@ -13,12 +19,25 @@ class TestController @Autowired()(sink: RecordSink, dao: RecordDao) {
 
   @PostMapping(Array("/go"))
   def go(): String = {
-    val browser = new Browser(new ChromeDriver())
+    System.setProperty("phantomjs.binary.path", "./phantomjs")
+    val webDriver = new PhantomJSDriver()
+    webDriver.manage().window().setSize(new Dimension(1920, 1080))
+    val browser = new Browser(webDriver)
 
     val filter = Filter(Action.BUY, FlatType.ALL)
 
-    new TopRealityScrapJob(browser, sink, filter)
-      .start()
+    try {
+      new TopRealityScrapJob(browser, sink, filter)
+        .start()
+    } catch {
+      case e: Exception => {
+        val file = webDriver.getScreenshotAs(OutputType.FILE)
+        e.printStackTrace()
+        println(file)
+        file.createNewFile()
+      }
+
+    }
     println("done")
     "Scrapping  done"
   }

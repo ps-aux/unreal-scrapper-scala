@@ -16,6 +16,7 @@ libraryDependencies ++= {
     "org.seleniumhq.selenium" % "selenium-java" % seleniumVersion,
     "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % seleniumVersion,
     "org.seleniumhq.selenium" % "selenium-chrome-driver" % seleniumVersion,
+    "com.codeborne" % "phantomjsdriver" % "1.3.0",
 
     "org.springframework" % "spring-webmvc" % springVersion,
     "org.springframework" % "spring-context" % springVersion,
