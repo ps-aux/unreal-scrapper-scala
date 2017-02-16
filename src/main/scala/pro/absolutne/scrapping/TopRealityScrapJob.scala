@@ -22,17 +22,20 @@ class TopRealityScrapJob(b: Browser, sink: RecordSink, filter: Filter) {
   def start(): Unit = {
     b.goTo("https://www.topreality.sk/")
     selectFilter()
+    var pageNo = 1
 
     val paginator = ".paginator .next"
 
     do {
-      b.find(paginator).click()
+      println(pageNo)
       val page = b find ".listing"
       page.findAll(".estate").asScala
         .map(extractRecord)
         .filter(_.isDefined)
         .map(_.get)
         .foreach(sink.sink)
+      b.find(paginator).click()
+      pageNo += 1
     } while (b isPresent paginator)
   }
 
@@ -53,12 +56,13 @@ class TopRealityScrapJob(b: Browser, sink: RecordSink, filter: Filter) {
       val locality = findByCss(".locality")
       val price = findByCss(".price")
       val date = findByCss(".date")
-      println(date.getText)
 
       val typeLocationActionInfo = findByCss(".links li")
 
-      val reType = takeFlatType.findAllIn(typeLocationActionInfo.getText)
-        .group(1)
+
+      val typeMatch = takeFlatType.findAllIn(typeLocationActionInfo.getText)
+      val reType =  if (typeMatch.hasNext) typeMatch.group(1) else "N/A"
+
 
       val priceVal = parseNum(price.getText)
 

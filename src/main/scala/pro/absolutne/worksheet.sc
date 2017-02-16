@@ -2,9 +2,9 @@ import java.text.SimpleDateFormat
 
 val r = "(\\d\\s.*byt|.*garz.*)\\s(.*)\\s(predaj)".r
 
-val in = "dvojgarzonka Miloslavov predaj"
+val in = "ee"
 
-r.findAllIn(in).group(1)
+r.findAllIn(in).hasNext
 
 val d = "9.2.2017"
 

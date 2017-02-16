@@ -19,7 +19,7 @@ class TestController @Autowired()(sink: RecordSink, dao: RecordDao) {
 
   @PostMapping(Array("/go"))
   def go(): String = {
-    System.setProperty("phantomjs.binary.path", "./phantomjs")
+    System.setProperty("phantomjs.binary.path", ".heroku/vendor/phantomjs")
     val webDriver = new PhantomJSDriver()
     webDriver.manage().window().setSize(new Dimension(1920, 1080))
     val browser = new Browser(webDriver)
