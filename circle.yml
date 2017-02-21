@@ -1,3 +1,7 @@
+general:
+  artifacts:
+    - "target/scala-2.12/unreal-scraper-assembly-0.1.jar"
+
 notify:
   webhooks:
     - url: http://185.177.23.154:3000/hook-dat-shit
