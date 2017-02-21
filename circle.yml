@@ -1,6 +1,6 @@
 general:
   artifacts:
-    - "target/scala-2.12/unreal-scraper-assembly-0.1.jar"
+    - "target/scala-2.12/classes/unreal-scraper-assembly-0.1.jar"
 
 notify:
   webhooks:
