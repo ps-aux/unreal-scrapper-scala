@@ -8,4 +8,4 @@ general:
 
 notify:
   webhooks:
-    - url: http://185.177.23.154:3000/hook-dat-shit
+    - url: http://185.177.23.154:3100/ci-hooks/circle-ci
