@@ -1,3 +1,7 @@
+compile:
+  override:
+    - bundle exec sbt clean stage
+
 general:
   artifacts:
     - "target/scala-2.12/classes/unreal-scraper-assembly-0.1.jar"
