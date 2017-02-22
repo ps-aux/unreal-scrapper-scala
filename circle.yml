@@ -1,6 +1,6 @@
 compile:
   override:
-    - bundle exec sbt clean stage
+    - sbt clean stage
 
 general:
   artifacts:
