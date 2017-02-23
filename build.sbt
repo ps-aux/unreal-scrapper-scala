@@ -1,5 +1,5 @@
 version := "0.1"
-name := "unreal-scraper"
+name := "unreal-scrapper"
 
 scalaVersion := "2.12.1"
 sbtVersion := "0.13.8"
