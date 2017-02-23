@@ -37,6 +37,8 @@ class TopRealityScrapJob(b: Browser, sink: RecordSink, filter: Filter) {
       b.find(paginator).click()
       pageNo += 1
     } while (b isPresent paginator)
+    println("no paginator found done")
+
   }
 
   private def extractRecord(el: WebElement): Option[RealEstateOffer] = {
@@ -61,7 +63,7 @@ class TopRealityScrapJob(b: Browser, sink: RecordSink, filter: Filter) {
 
 
       val typeMatch = takeFlatType.findAllIn(typeLocationActionInfo.getText)
-      val reType =  if (typeMatch.hasNext) typeMatch.group(1) else "N/A"
+      val reType = if (typeMatch.hasNext) typeMatch.group(1) else "N/A"
 
 
       val priceVal = parseNum(price.getText)
