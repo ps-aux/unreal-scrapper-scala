@@ -16,7 +16,7 @@ class WebServer {
   private val logger = LoggerFactory.getLogger(classOf[WebServer])
 
   private val host = "0.0.0.0"
-  private val port = 8000
+  private val port = 8100
   private val ctxPath = "/"
   private val appName = "unreal-scrapper"
 

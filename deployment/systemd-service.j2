@@ -1,0 +1,13 @@
+[Unit]
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/java -jar {{dir_path}}/{{app_name}}.jar
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier={{service_name}}
+
+
+[Install]
+WantedBy=default.target
