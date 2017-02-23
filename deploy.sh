@@ -6,5 +6,5 @@ if [ "$#" -ne 1 ]; then
     exit 1
 fi
 
-echo "Deploying unreal-scrapper via ansible"
+echo "Deploying unreal-scrapper via ansible. Artifacts dir is $1"
 ansible-playbook "$script_dir/deployment/deploy.yml" --extra-vars="artifact_path=$1"
