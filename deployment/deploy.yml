@@ -1,5 +1,5 @@
 ---
-- hosts: virt1
+- hosts: unreal-scrapper
   vars:
     dir_path: /opt/unreal-scrapper
     service_name: unreal-scrapper
