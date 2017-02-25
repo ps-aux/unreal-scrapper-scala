@@ -8,7 +8,7 @@ import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.phantomjs.PhantomJSDriver
 import org.openqa.selenium.remote.ScreenshotException
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.{PostMapping, RestController}
+import org.springframework.web.bind.annotation.{GetMapping, PostMapping, RestController}
 import pro.absolutne.data.RecordSink
 import pro.absolutne.data.storage.RecordDao
 import pro.absolutne.scrapping.{Action, Filter, FlatType, TopRealityScrapJob}
@@ -16,6 +16,9 @@ import pro.absolutne.webscrap.Browser
 
 @RestController
 class TestController @Autowired()(sink: RecordSink, dao: RecordDao) {
+
+  @GetMapping(Array("/"))
+  def index() = "Hello from unreal-scrapper"
 
   @PostMapping(Array("/go"))
   def go(): String = {
