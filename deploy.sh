@@ -7,5 +7,5 @@ if [ "$#" -ne 1 ]; then
 fi
 
 echo "Deploying unreal-scrapper via ansible. Artifacts dir is $1"
-cd "$script_dir/deploy"
+cd "$script_dir/deployment"
 ansible-playbook "deploy.yml" --extra-vars="artifact_path=$1"
