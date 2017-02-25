@@ -4,7 +4,7 @@
     dir_path: /opt/unreal-scrapper
     service_name: unreal-scrapper
     app_name: unreal-scrapper
-    artifact_name: unreal-scraper-assembly-0.1.jar
+    artifact_name: unreal-scrapper-assembly-0.1.jar
     app_port: 8100
 
   tasks:
