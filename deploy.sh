@@ -11,4 +11,3 @@ cd "$script_dir/deployment"
 ansible-playbook "deploy.yml" --extra-vars="artifact_path=$1"
 
 
-### wooooooo
