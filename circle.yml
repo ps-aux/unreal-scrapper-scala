@@ -1,6 +1,6 @@
 compile:
   override:
-    - sbt clean stage
+    - echo 'no build'
 
 general:
   artifacts:
